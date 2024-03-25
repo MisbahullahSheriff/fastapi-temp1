@@ -16,7 +16,16 @@ def index():
 
 @app.post("/predict")
 def make_prediction(car: Car):
-    x_new = pd.DataFrame(car.model_dump)
+    x_new = pd.DataFrame(data=dict(
+        company=[car.company],
+        year=[car.year],
+        owner=[car.owner],
+        fuel=[car.fuel],
+        km_driven=[car.km_driven],
+        mileage_mpg=[car.mileage_mpg],
+        engine_cc=[car.engine_cc],
+        seats=[car.seats]
+    ))
     model = joblib.load("model.joblib")
     predicted_value = model.predict(x_new)[0]
     return f"The car of given specifications will cost {predicted_value:,.0f} INR"
